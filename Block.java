@@ -7,28 +7,29 @@ public class Block {
    // x and y dimensions of map
    int size = GenerateWorld.arraySize;
 
-   // variable for blocks x location
+   // variable for blocks x location on the map
    int xLoc;
 
-   // variable for blocks y location
+   // variable for blocks y location on the map
    int yLoc;
 
    // one if block has been visited; initialized to zero
    int visited;
 
-   // Frank?
+   // initialize the int for the number generator, used in the
+   // creation of block values.
    int selector;
 
-   // ??
+   // set the amount the random number generator should use
    int percentage = 10;
 
-   // ??
+   // variable for blocks x location on the map
    int x;
 
-   // ??
+   // variable for blocks y location on the map
    int y;
 
-   // ??
+   // initialize the count to zero, used in
    int count = 0;
 
    // Block object variables.
@@ -44,7 +45,7 @@ public class Block {
 
    Block[][] blocks = new Block[size][size];
    Random generator = new Random();
-   Queue<Block> q = new LinkedList<Block>();
+   Queue<Block> queue	= new LinkedList<Block>();
    Grass grass = new Grass();
    Water water = new Water();
 
@@ -81,6 +82,7 @@ public class Block {
    }
 
    //Prints world.
+
    public void printWorld() {
       for (int i = 0; i < size; i++) {
          for (int k = 0; k < size; k++) {
@@ -133,6 +135,22 @@ public class Block {
       }
    }
 
+   // method for setting icon
+   public String getIcon(){
+      selector = generator.nextInt(percentage);
+
+      // 30% chance to be a water tile
+      if (selector > 6) {
+         return water.getTile();
+      }
+
+      // 70% chance to be a grass tile
+      else {
+         return grass.getTile();
+      }
+
+   }
+
    //Step 1: Check to see if where you're placing the source block has
    //	has been visited.
    //Step 2: If it hasn't been visited, set it to visited.
@@ -142,57 +160,68 @@ public class Block {
    //	to queue.
    //Step 6: Repeat 4-5 until the queue is empty.
    public void populate() {
+
       xLoc = generator.nextInt(size);
       yLoc = generator.nextInt(size);
-      selector = generator.nextInt(percentage);
 
-      // 60% chance to be a water tile
-      if (selector > 6) {
-         icon = water.getTile();
-      }
-      // 40% chane to be a grass tile
-      else {
-         icon = grass.getTile();
-      }
 
       source = blocks[xLoc][yLoc];
+
+      // if the source isn't visited
       if (source.visited == 0) {
-         source.icon = icon;
+
+
+         // mark source as visited
          source.visited = 1;
-         q.add(source);
+
+         // add current block to the queue
+         queue.add(source);
+
          //System.out.println("Adding " + source);
-         while(!q.isEmpty()) {
-            temp = q.remove();
+
+         // while the queue is NOT empty
+         // check for neighboring blocks
+         while(!queue.isEmpty()) {
+
+            //  check if icon should be W or G
+            source.icon = getIcon();
+
+            // pop a block off the queue and declare x and y variables
+            temp = queue.remove();
             xLoc = temp.x;
             yLoc = temp.y;
-            temp.icon = icon;
-            count = count + 1;
+            temp.icon = getIcon();
+
+            // Why wasn't this ++?
+            // and why isn't it used anywhere?
+            count++;
+
 
             if (getLeft() != null) {
                if (blocks[getLeft().x][getLeft().y].visited == 0) {
-                  q.add(getLeft());
+
+                  queue.add(getLeft());
                   blocks[getLeft().x][getLeft().y].visited = 1;
                }
             }
             if (getUp() != null) {
                if (blocks[getUp().x][getUp().y].visited == 0) {
-                  q.add(getUp());
+                  queue.add(getUp());
                   blocks[getUp().x][getUp().y].visited = 1;
                }
             }
             if (getRight() != null) {
                if (blocks[getRight().x][getRight().y].visited == 0) {
-                  q.add(getRight());
+                  queue.add(getRight());
                   blocks[getRight().x][getRight().y].visited = 1;
                }
             }
             if (getDown() != null) {
                if (blocks[getDown().x][getDown().y].visited == 0) {
-                  q.add(getDown());
+                  queue.add(getDown());
                   blocks[getDown().x][getDown().y].visited = 1;
                }
             }
-
          }
       }
    }

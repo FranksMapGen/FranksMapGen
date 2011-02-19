@@ -1,6 +1,6 @@
 
 public interface Tile {
-	
-	public String getTile();
+
+   public String getTile();
 
 }
