@@ -1,11 +1,11 @@
 About: Intrigued by the algorithms in randomly generated maps found
-           in games like Minecraft and Dwarf Fortress, Frank decided to see
-           what goes into the development such a program. This is his
-           attempt.
+      in games like Minecraft and Dwarf Fortress, Frank decided to see
+      what goes into the development such a program. This is his
+      attempt.
 
 Usage: This just contains the source code for the program. Just compile
-           normally and run the Tester class. To change map size, change
-           variable found in the Tester.java file.
+      normally and run the Tester class. To change map size, change
+      variable found in the Tester.java file.
 
            i.e.
            $javac *.java
